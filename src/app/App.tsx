@@ -1,7 +1,12 @@
 import React from "react"
-
-function App() {
-  return <div></div>
+import { Header } from "../common/components/header/Header"
+import { Routs } from "../common/components/routes/Routs"
+const App = () => {
+  return (
+    <div>
+      <Header />
+      <Routs />
+    </div>
+  )
 }
-
 export default App
