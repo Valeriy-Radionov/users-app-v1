@@ -1,4 +1,4 @@
-import { Action, combineReducers, configureStore, getDefaultMiddleware } from "@reduxjs/toolkit"
+import { Action, combineReducers, configureStore } from "@reduxjs/toolkit"
 import { appReducer } from "../reducers/appReducer"
 import { authReducer } from "../reducers/authReducer"
 import thunkMiddleware, { ThunkAction } from "redux-thunk"

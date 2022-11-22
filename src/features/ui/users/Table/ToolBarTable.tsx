@@ -1,14 +1,11 @@
-import Toolbar from "@mui/material/Toolbar"
-import IconButton from "@mui/material/IconButton"
-import { alpha } from "@mui/material/styles"
-import Typography from "@mui/material/Typography"
-import Tooltip from "@mui/material/Tooltip"
-import DeleteIcon from "@mui/icons-material/Delete"
-import FilterListIcon from "@mui/icons-material/FilterList"
 import BlockIcon from "@mui/icons-material/Block"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EngineeringIcon from "@mui/icons-material/Engineering"
 import LockOpenIcon from "@mui/icons-material/LockOpen"
 import PersonIcon from "@mui/icons-material/Person"
-import EngineeringIcon from "@mui/icons-material/Engineering"
+import IconButton from "@mui/material/IconButton"
+import Toolbar from "@mui/material/Toolbar"
+import Typography from "@mui/material/Typography"
 export type ToolBarTableType = {
   numSelected: number
 }
@@ -34,7 +31,6 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected }) => {
           </div>
         </Typography>
       ) : (
-        // </Typography>
         <Typography sx={{ flex: "1 1 100%" }} variant="subtitle1" id="tableTitle" component="div">
           <div style={{ display: "flex" }}>
             <div>Selected {numSelected}</div>

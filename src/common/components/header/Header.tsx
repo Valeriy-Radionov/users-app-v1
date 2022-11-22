@@ -13,7 +13,7 @@ export const Header = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, margin: "0 auto", width: "90%" }}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="sticky" style={{ background: "#6a77d9" }}>
         <Toolbar>
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>

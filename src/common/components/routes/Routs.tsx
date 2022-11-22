@@ -3,20 +3,20 @@ import { Login } from "../../../features/ui/auth/login/Login"
 import { Registration } from "../../../features/ui/auth/registration/Registration"
 import { Users } from "../../../features/ui/users/Users"
 import { ErrorPage } from "../error/ErrorPage"
-export enum PATH {
-  LOGIN = "/login",
-  REGISTR = "/registration",
-  USERS = "/users",
-  ERROR = "*",
+export enum RouterPath {
+  login = "/login",
+  registr = "/registration",
+  users = "/users",
+  error = "*",
 }
 export const Routs = () => {
   return (
     <Routes>
       <Route path={"/"} element={<Login />} />
-      <Route path={PATH.LOGIN} element={<Login />} />
-      <Route path={PATH.REGISTR} element={<Registration />} />
-      <Route path={PATH.USERS} element={<Users />} />
-      <Route path={PATH.ERROR} element={<ErrorPage />} />
+      <Route path={RouterPath.login} element={<Login />} />
+      <Route path={RouterPath.registr} element={<Registration />} />
+      <Route path={RouterPath.users} element={<Users />} />
+      <Route path={RouterPath.error} element={<ErrorPage />} />
     </Routes>
   )
 }

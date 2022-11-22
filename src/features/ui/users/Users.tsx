@@ -8,7 +8,7 @@ import TablePagination from "@mui/material/TablePagination"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import Checkbox from "@mui/material/Checkbox"
-import { ToolBarTable } from "./ToolBarTable"
+import { ToolBarTable } from "./Table/ToolBarTable"
 import { EnhancedTableHead } from "./Table/EnhancedTableHead"
 
 export type Data = {
@@ -28,8 +28,6 @@ export type HeadCell = {
 export type Order = "asc" | "desc"
 
 export const Users = () => {
-  const [order, setOrder] = React.useState<Order>("asc")
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("firstDate")
   const [selected, setSelected] = React.useState<readonly string[]>([])
   const [page, setPage] = React.useState(0)
   const [dense, setDense] = React.useState(false)
@@ -95,10 +93,6 @@ export const Users = () => {
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
-  }
-
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked)
   }
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
