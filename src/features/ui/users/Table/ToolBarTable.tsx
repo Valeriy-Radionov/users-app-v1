@@ -6,10 +6,25 @@ import PersonIcon from "@mui/icons-material/Person"
 import IconButton from "@mui/material/IconButton"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
+import { useAppDispatch } from "../../../../common/hooks/storeHooks"
+import { logoutTC } from "../../../bll/reducers/authReducer"
+import { Navigate } from "react-router-dom"
+import LogoutIcon from "@mui/icons-material/Logout"
+import { useEffect } from "react"
+import { render } from "react-dom"
+import { Login } from "../../auth/login/Login"
+import { NavLink } from "react-router-dom"
+
 export type ToolBarTableType = {
   numSelected: number
 }
 export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected }) => {
+  const dispatch = useAppDispatch()
+  let token = localStorage.getItem("token")
+  const logoutHandler = () => {
+    dispatch(logoutTC())
+  }
+
   return (
     <Toolbar
       sx={{
@@ -58,6 +73,9 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected }) => {
           <EngineeringIcon></EngineeringIcon>
         </div>
       )}
+      <IconButton aria-label="delete" size="large" onClick={logoutHandler}>
+        <LogoutIcon fontSize="large" style={{ color: "#13D170" }} sx={{ boxShadow: 5, borderRadius: "5px" }} />
+      </IconButton>
     </Toolbar>
   )
 }

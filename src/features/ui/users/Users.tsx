@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
@@ -10,6 +10,12 @@ import Paper from "@mui/material/Paper"
 import Checkbox from "@mui/material/Checkbox"
 import { ToolBarTable } from "./Table/ToolBarTable"
 import { EnhancedTableHead } from "./Table/EnhancedTableHead"
+import { Navigate } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../../../common/hooks/storeHooks"
+import { getUsersTC } from "../../bll/reducers/usersReducer"
+import { UserDataType } from "../../../api/authApi"
+import { UsersTableBody } from "./Table/TableBody"
+import { log } from "console"
 
 export type Data = {
   userId: string
@@ -28,54 +34,32 @@ export type HeadCell = {
 export type Order = "asc" | "desc"
 
 export const Users = () => {
-  const [selected, setSelected] = React.useState<readonly string[]>([])
-  const [page, setPage] = React.useState(0)
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
-  function createData(userId: string, name: string, email: string, firstDate: string, lastDate: string, status: boolean): Data {
-    return {
-      userId,
-      name,
-      email,
-      firstDate,
-      lastDate,
-      status,
-    }
-  }
-  const rows = [
-    createData("1111113245657678", "Valerka", "tra-berker@mail.ru", "12.08.12/07:45", "15.09.22/04:34", false),
-    createData("1111113245657632278", "Dima", "yandex@ef.ru", "02.08.22/07:45", "14.09.22/04:34", true),
-    createData("3", "305", "3.7", "67", "4.3", false),
-    createData("4", "305", "3.7", "67", "4.2323", false),
-    createData("5", "30r5", "3d.7", "67", "4.323", false),
-    createData("6", "45r2", "25.0", "51", " 4.r39", false),
-    createData("7", "4r5rr2", "25.0", "51", " 4.r9", false),
-    createData("8", "452", "2rr5.0", "rrr51", " 4.9", false),
-    createData("9", "305", "3.7s", "6s7", "4.3", false),
-    createData("10", "30s5", "3.557", "67", "4s.3", false),
-    createData("11", "305", "3.7ee", "6s7", "4.3", false),
-    createData("12", "452", "25.0", "51", " 4.9", false),
-    createData("13", "4452", "25.330", "51", " 4.9", false),
-    createData("14", "4452", "25.330", "51", " 4.9", false),
-    createData("15", "4452", "25.330", "51", " 4.9", false),
-  ]
+  const token = localStorage.getItem("token")
+  const dispatch = useAppDispatch()
+  const _users = useAppSelector((state) => state.users.users)
+  const users = JSON.parse(JSON.stringify(_users)) as UserDataType[]
+  const [selected, setSelected] = useState<readonly string[]>([])
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  useEffect(() => {
+    token && dispatch(getUsersTC(token))
+  }, [dispatch])
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name)
+      const newSelected = users.map((n) => n.name)
       setSelected(newSelected)
       return
     }
     setSelected([])
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name)
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    const selectedIndex = selected.indexOf(id)
     let newSelected: readonly string[] = []
-
+    console.log(event.target)
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      newSelected = newSelected.concat(selected, id)
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1))
     } else if (selectedIndex === selected.length - 1) {
@@ -96,20 +80,26 @@ export const Users = () => {
   }
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
-
+  // if (!token) {
+  //   return <Navigate to="/login" />
+  // }
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "90%", mb: 2, margin: "0 auto" }}>
         <ToolBarTable numSelected={selected.length} />
         <TableContainer sx={{ border: "2px solid #9aa2e5" }}>
-          <Table aria-labelledby="tableTitle" size={dense ? "small" : "medium"}>
-            <EnhancedTableHead numSelected={selected.length} onSelectAllClick={handleSelectAllClick} rowCount={rows.length} />
+          <Table aria-labelledby="tableTitle" size={"medium"}>
+            <EnhancedTableHead numSelected={selected.length} onSelectAllClick={handleSelectAllClick} rowCount={users.length} />
             <TableBody>
-              {rows.map((row, index) => {
-                const isItemSelected = isSelected(row.name)
+              {users.map((user, index) => {
+                const isItemSelected = isSelected(user.name)
                 const labelId = `enhanced-table-checkbox-${index}`
+                console.log(index)
+
+                // return <UsersTableBody isItemSelected={isItemSelected} selected={selected} setSelected={setSelected} user={user} />
+
                 return (
-                  <TableRow hover onClick={(event) => handleClick(event, row.name)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.name} selected={isItemSelected}>
+                  <TableRow hover onClick={(event) => handleClick(event, user.name)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={user.name} selected={isItemSelected}>
                     <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"
@@ -119,14 +109,14 @@ export const Users = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell component="th" id={labelId} scope="row" padding="none">
-                      {row.name}
+                    <TableCell id={labelId} scope="row" padding="none">
+                      {user.name}
                     </TableCell>
-                    <TableCell align="right">{row.email}</TableCell>
-                    <TableCell align="right">{row.firstDate}</TableCell>
-                    <TableCell align="right">{row.lastDate}</TableCell>
-                    <TableCell align="right">{row.userId}</TableCell>
-                    <TableCell align="right">{row.status.toString()}</TableCell>
+                    <TableCell align="right">{user.email}</TableCell>
+                    <TableCell align="right">{user.registrationDate}</TableCell>
+                    <TableCell align="right">{user.lastLoginDate}</TableCell>
+                    <TableCell align="right">{user.id}</TableCell>
+                    <TableCell align="right">{user.blockStatus.toString()}</TableCell>
                   </TableRow>
                 )
               })}
@@ -136,7 +126,7 @@ export const Users = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={users.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

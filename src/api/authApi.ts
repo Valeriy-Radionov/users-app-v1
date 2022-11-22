@@ -6,15 +6,19 @@ export const baseInstance = axios.create({
 const loginUrl = "auth/login"
 const registrUrl = "auth/registration"
 const logoutUrl = "auth/logout"
+const meUrl = "auth/me"
 export const authApi = {
   login(loginData: LoginDataType) {
-    return baseInstance.post<LoginDataType, AxiosResponse<LoginResponseType>>(loginUrl, loginData)
+    return baseInstance.post<LoginDataType, AxiosResponse<UserDataType>>(loginUrl, loginData)
   },
   registration(registerData: RegistrationDataType) {
     return baseInstance.post<RegistrationDataType, AxiosResponse<UserDataType>>(registrUrl, registerData)
   },
   logOut(id: string) {
-    return baseInstance.post<LogoutDataType>(logoutUrl, id)
+    return baseInstance.post<LogoutDataType, AxiosResponse<LogOutResponseType>>(logoutUrl, id)
+  },
+  me(token: string) {
+    return baseInstance.post<MeType, AxiosResponse<UserDataType>>(meUrl, token)
   },
 }
 
@@ -36,7 +40,7 @@ export type LoginDataType = {
   password: string
 }
 
-export type LoginResponseType = {
+export type LogOutResponseType = {
   resultCode: ResultCode
   message: string
 }
@@ -47,4 +51,7 @@ export type RegistrationDataType = {
 }
 export type LogoutDataType = {
   id: string
+}
+export type MeType = {
+  token: string
 }

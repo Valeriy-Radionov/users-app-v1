@@ -3,7 +3,7 @@ import { InfoResponseType } from "../features/bll/reducers/appReducer"
 import { baseInstance, UserDataType } from "./authApi"
 
 const usersUrl = "users"
-export const authApi = {
+export const usersApi = {
   getUsers() {
     return baseInstance.get<null, AxiosResponse<UserDataType[]>>(usersUrl)
   },

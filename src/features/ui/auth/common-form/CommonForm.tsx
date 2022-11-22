@@ -1,10 +1,11 @@
 import { Button, FormControl, FormGroup, Grid, TextField } from "@mui/material"
 import { useFormik } from "formik"
 import React from "react"
+import { Navigate } from "react-router-dom"
 import { LoginDataType } from "../../../../api/authApi"
 import { NavigateButton } from "../../../../common/components/nav-button/NavigateButton"
 import { RouterPath } from "../../../../common/components/routes/Routs"
-import { useAppDispatch } from "../../../../common/hooks/storeHooks"
+import { useAppDispatch, useAppSelector } from "../../../../common/hooks/storeHooks"
 import { validatorEmail, validatorRequiredValue } from "../../../../common/utils/validators/authValidators"
 import { loginTC } from "../../../bll/reducers/authReducer"
 export type FormikType = {
@@ -21,6 +22,8 @@ type CommonAuthFormType = {
 
 export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserName, rout, navLinkName, submitBtnname }) => {
   const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -44,6 +47,9 @@ export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserNa
       formik.resetForm()
     },
   })
+  if (isLoggedIn) {
+    return <Navigate to={"/users"} />
+  }
   return (
     <Grid container justifyContent={"center"} alignItems={"center"} sx={{ height: "40vh" }}>
       <Grid item justifyContent={"center"} alignItems={"center"}>
