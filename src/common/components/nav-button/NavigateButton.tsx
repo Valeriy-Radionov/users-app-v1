@@ -8,10 +8,11 @@ type NavigateButtonPropsType = {
   name?: string
   callback?: () => void
   children?: ReactNode
+  type?: string | undefined
 }
-export const NavigateButton: React.FC<NavigateButtonPropsType> = ({ rout, name, callback, children }) => {
+export const NavigateButton: React.FC<NavigateButtonPropsType> = ({ rout, name, callback, type, children }) => {
   return (
-    <NavLink to={rout} style={{ color: "#6a77d9", textAlign: "center", padding: "10px" }} onClick={callback}>
+    <NavLink type={type} to={rout} style={{ color: "#6a77d9", textAlign: "center", padding: "10px" }} onClick={callback}>
       {children}
       {name}
     </NavLink>

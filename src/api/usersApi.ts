@@ -7,8 +7,8 @@ export const usersApi = {
   getUsers() {
     return baseInstance.get<null, AxiosResponse<UserDataType[]>>(usersUrl)
   },
-  deleteUser(id: string) {
-    return baseInstance.delete<null, AxiosResponse<InfoResponseType>>(`${usersUrl}/${id}`)
+  deleteUser(id: string, isAll: boolean) {
+    return baseInstance.delete<AxiosResponse<InfoResponseType>>(`${usersUrl}/${id}/${isAll}`)
   },
 
   blockUser(id: string, isBlocked: boolean) {

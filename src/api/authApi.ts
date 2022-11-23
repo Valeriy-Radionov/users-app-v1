@@ -6,7 +6,7 @@ export const baseInstance = axios.create({
 const loginUrl = "auth/login"
 const registrUrl = "auth/registration"
 const logoutUrl = "auth/logout"
-const meUrl = "auth/me"
+const meUrl = "auth"
 export const authApi = {
   login(loginData: LoginDataType) {
     return baseInstance.post<LoginDataType, AxiosResponse<UserDataType>>(loginUrl, loginData)
@@ -18,7 +18,7 @@ export const authApi = {
     return baseInstance.post<LogoutDataType, AxiosResponse<LogOutResponseType>>(logoutUrl, id)
   },
   me(token: string) {
-    return baseInstance.post<MeType, AxiosResponse<UserDataType>>(meUrl, token)
+    return baseInstance.post<AxiosResponse<UserDataType>>(meUrl, token)
   },
 }
 

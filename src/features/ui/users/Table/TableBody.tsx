@@ -27,7 +27,7 @@ export const UsersTableBody: React.FC<TableBodyPropsType> = ({ user, selected, s
   }
 
   return (
-    <TableRow hover onClick={(event) => handleClick(event, user.name)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={user.name} selected={isItemSelected}>
+    <TableRow hover onClick={(event) => handleClick(event, user.name)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={user.id} selected={isItemSelected}>
       <TableCell padding="checkbox">
         <Checkbox
           color="primary"
@@ -37,10 +37,10 @@ export const UsersTableBody: React.FC<TableBodyPropsType> = ({ user, selected, s
           }}
         />
       </TableCell>
-      <TableCell id={labelId} scope="row" padding="none">
+      <TableCell id={labelId} scope="row" padding="none" key={user.id}>
         {user.name}
       </TableCell>
-      <TableCell align="right">{user.email}</TableCell>
+      <TableCell align="right">{user.email} </TableCell>
       <TableCell align="right">{user.registrationDate}</TableCell>
       <TableCell align="right">{user.lastLoginDate}</TableCell>
       <TableCell align="right">{user.id}</TableCell>

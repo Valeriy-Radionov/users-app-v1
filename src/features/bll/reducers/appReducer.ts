@@ -28,8 +28,8 @@ const slice = createSlice({
     setAppErrorAC(state, action: PayloadAction<{ error: string }>) {
       state.error = action.payload.error
     },
-    setAppInitializedAC(state, action: PayloadAction<{ value: boolean }>) {
-      state.isInitialized = action.payload.value
+    setAppInitializedAC(state, action: PayloadAction<{ isInitialized: boolean }>) {
+      state.isInitialized = action.payload.isInitialized
     },
   },
 })
@@ -39,17 +39,20 @@ export const setAppErrorAC = slice.actions.setAppErrorAC
 export const setAppInitializedAC = slice.actions.setAppInitializedAC
 export const setAppStatusAC = slice.actions.setAppStatusAC
 
-export const isInitializedTC = createAsyncThunk("app/initialized", async (token: string, thunkApi) => {
-  thunkApi.dispatch(setAppStatusAC({ status: "loading" }))
+export const isInitializedTC = createAsyncThunk("app/initialized", async (token: string | null, thunkApi) => {
   try {
-    const response = await authApi.me(token)
-    if (response.data) {
-      thunkApi.dispatch(setAppStatusAC({ status: "succeeded" }))
-    } else {
-      thunkApi.dispatch(setAppStatusAC({ status: "failed" }))
+    if (token) {
+      const response = await authApi.me(token)
+      if (response.data) {
+        thunkApi.dispatch(setAppInitializedAC({ isInitialized: true }))
+        console.log("zadispatchili true")
+      }
     }
   } catch (e) {
-    thunkApi.dispatch(setAppStatusAC({ status: "failed" }))
+    thunkApi.dispatch(setAppInitializedAC({ isInitialized: true }))
+
     handleServerNetworkError(e, thunkApi.dispatch)
+  } finally {
+    thunkApi.dispatch(setAppInitializedAC({ isInitialized: true }))
   }
 })

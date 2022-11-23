@@ -12,10 +12,9 @@ import { ToolBarTable } from "./table/ToolBarTable"
 import { EnhancedTableHead } from "./table/EnhancedTableHead"
 import { Navigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../../common/hooks/storeHooks"
-import { getUsersTC } from "../../bll/reducers/usersReducer"
+import { deleteUserTC, getUsersTC } from "../../bll/reducers/usersReducer"
 import { UserDataType } from "../../../api/authApi"
 import { UsersTableBody } from "./table/TableBody"
-import { log } from "console"
 
 export type Data = {
   userId: string
@@ -36,14 +35,26 @@ export type Order = "asc" | "desc"
 export const Users = () => {
   const token = localStorage.getItem("token")
   const dispatch = useAppDispatch()
-  const _users = useAppSelector((state) => state.users.users)
-  const users = JSON.parse(JSON.stringify(_users)) as UserDataType[]
+  const users = useAppSelector((state) => state.users.users)
   const [selected, setSelected] = useState<readonly string[]>([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  useEffect(() => {
-    token && dispatch(getUsersTC(token))
-  }, [dispatch])
+
+  const deleteUser = () => {
+    const selectedUser = users.find((el) => selected[0] === el.name)
+    const id = selectedUser?.id
+    const currentToken = localStorage.getItem("token")
+    if (selected.length === users.length) {
+      dispatch(deleteUserTC({ token: currentToken!, id: currentToken!, isAll: true }))
+    } else {
+      if (selectedUser && currentToken === id) {
+        dispatch(deleteUserTC({ token: currentToken, id: id, isAll: false }))
+        localStorage.removeItem("token")
+      }
+      id && dispatch(deleteUserTC({ token: token!, id: id, isAll: false }))
+    }
+  }
+  const blockUser = () => {}
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -63,13 +74,21 @@ export const Users = () => {
     setPage(0)
   }
 
+  useEffect(() => {
+    token && dispatch(getUsersTC(token))
+  }, [dispatch, deleteUser])
+
   const isSelected = (name: string) => selected.indexOf(name) !== -1
   if (!token) {
     return <Navigate to="/login" />
   }
+  if (!token) {
+    return <Navigate to={"login"} />
+  }
+
   return (
     <Box sx={{ width: "100%" }}>
-      <ToolBarTable numSelected={selected.length} />
+      <ToolBarTable numSelected={selected.length} blockUser={blockUser} deleteUser={deleteUser} />
       <Paper sx={{ width: "90%", mb: 2, margin: "0 auto" }}>
         <TableContainer sx={{ border: "2px solid #9aa2e5" }}>
           <Table aria-labelledby="tableTitle" size={"medium"}>
@@ -78,7 +97,7 @@ export const Users = () => {
               {users.map((user, index) => {
                 const isItemSelected = isSelected(user.name)
                 const labelId = user.id
-                return <UsersTableBody isItemSelected={isItemSelected} selected={selected} setSelected={setSelected} user={user} labelId={labelId} />
+                return <UsersTableBody key={user.id} isItemSelected={isItemSelected} selected={selected} setSelected={setSelected} user={user} labelId={labelId} />
               })}
             </TableBody>
           </Table>
