@@ -8,13 +8,13 @@ import TablePagination from "@mui/material/TablePagination"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import Checkbox from "@mui/material/Checkbox"
-import { ToolBarTable } from "./Table/ToolBarTable"
-import { EnhancedTableHead } from "./Table/EnhancedTableHead"
+import { ToolBarTable } from "./table/ToolBarTable"
+import { EnhancedTableHead } from "./table/EnhancedTableHead"
 import { Navigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../../common/hooks/storeHooks"
 import { getUsersTC } from "../../bll/reducers/usersReducer"
 import { UserDataType } from "../../../api/authApi"
-import { UsersTableBody } from "./Table/TableBody"
+import { UsersTableBody } from "./table/TableBody"
 import { log } from "console"
 
 export type Data = {
@@ -54,22 +54,6 @@ export const Users = () => {
     setSelected([])
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    const selectedIndex = selected.indexOf(id)
-    let newSelected: readonly string[] = []
-    console.log(event.target)
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
-    }
-    setSelected(newSelected)
-  }
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
   }
@@ -80,45 +64,21 @@ export const Users = () => {
   }
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
-  // if (!token) {
-  //   return <Navigate to="/login" />
-  // }
+  if (!token) {
+    return <Navigate to="/login" />
+  }
   return (
     <Box sx={{ width: "100%" }}>
+      <ToolBarTable numSelected={selected.length} />
       <Paper sx={{ width: "90%", mb: 2, margin: "0 auto" }}>
-        <ToolBarTable numSelected={selected.length} />
         <TableContainer sx={{ border: "2px solid #9aa2e5" }}>
           <Table aria-labelledby="tableTitle" size={"medium"}>
             <EnhancedTableHead numSelected={selected.length} onSelectAllClick={handleSelectAllClick} rowCount={users.length} />
             <TableBody>
               {users.map((user, index) => {
                 const isItemSelected = isSelected(user.name)
-                const labelId = `enhanced-table-checkbox-${index}`
-                console.log(index)
-
-                // return <UsersTableBody isItemSelected={isItemSelected} selected={selected} setSelected={setSelected} user={user} />
-
-                return (
-                  <TableRow hover onClick={(event) => handleClick(event, user.name)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={user.name} selected={isItemSelected}>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell id={labelId} scope="row" padding="none">
-                      {user.name}
-                    </TableCell>
-                    <TableCell align="right">{user.email}</TableCell>
-                    <TableCell align="right">{user.registrationDate}</TableCell>
-                    <TableCell align="right">{user.lastLoginDate}</TableCell>
-                    <TableCell align="right">{user.id}</TableCell>
-                    <TableCell align="right">{user.blockStatus.toString()}</TableCell>
-                  </TableRow>
-                )
+                const labelId = user.id
+                return <UsersTableBody isItemSelected={isItemSelected} selected={selected} setSelected={setSelected} user={user} labelId={labelId} />
               })}
             </TableBody>
           </Table>

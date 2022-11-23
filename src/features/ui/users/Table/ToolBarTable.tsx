@@ -14,6 +14,8 @@ import { useEffect } from "react"
 import { render } from "react-dom"
 import { Login } from "../../auth/login/Login"
 import { NavLink } from "react-router-dom"
+import { NavigateButton } from "../../../../common/components/nav-button/NavigateButton"
+import { RouterPath } from "../../../../common/components/routes/Routs"
 
 export type ToolBarTableType = {
   numSelected: number
@@ -33,7 +35,9 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected }) => {
         border: "2px solid",
         borderRadius: "5px",
         borderColor: "#6a77d9",
-        margin: "10px 0px 10px 0px",
+        bgcolor: "#9aa2e5",
+        margin: "10px auto",
+        width: "85%",
       }}
     >
       {numSelected > 0 ? (
@@ -73,9 +77,9 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected }) => {
           <EngineeringIcon></EngineeringIcon>
         </div>
       )}
-      <IconButton aria-label="delete" size="large" onClick={logoutHandler}>
-        <LogoutIcon fontSize="large" style={{ color: "#13D170" }} sx={{ boxShadow: 5, borderRadius: "5px" }} />
-      </IconButton>
+      <NavigateButton rout={RouterPath.login} callback={logoutHandler}>
+        <LogoutIcon fontSize="large" style={{ color: "#13D170", background: "#afeafa" }} sx={{ boxShadow: 5, borderRadius: "5px", border: "2px solid #51d8fc" }} />
+      </NavigateButton>
     </Toolbar>
   )
 }

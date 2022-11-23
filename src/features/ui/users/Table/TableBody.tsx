@@ -8,12 +8,12 @@ type TableBodyPropsType = {
   selected: readonly string[]
   setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>
   isItemSelected: boolean
+  labelId: string
 }
-export const UsersTableBody: React.FC<TableBodyPropsType> = ({ user, selected, setSelected, isItemSelected }) => {
+export const UsersTableBody: React.FC<TableBodyPropsType> = ({ user, selected, setSelected, isItemSelected, labelId }) => {
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>, id: string) => {
     const selectedIndex = selected.indexOf(id)
     let newSelected: readonly string[] = []
-
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id)
     } else if (selectedIndex === 0) {
@@ -27,23 +27,23 @@ export const UsersTableBody: React.FC<TableBodyPropsType> = ({ user, selected, s
   }
 
   return (
-    <TableRow hover onClick={(event) => handleClick(event, user.id)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={user.id} selected={isItemSelected}>
+    <TableRow hover onClick={(event) => handleClick(event, user.name)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={user.name} selected={isItemSelected}>
       <TableCell padding="checkbox">
         <Checkbox
           color="primary"
           checked={isItemSelected}
           inputProps={{
-            "aria-labelledby": user.id,
+            "aria-labelledby": labelId,
           }}
         />
       </TableCell>
-      <TableCell id={user.name} scope="row" padding="none">
+      <TableCell id={labelId} scope="row" padding="none">
         {user.name}
       </TableCell>
-      <TableCell align="right">{user.id}</TableCell>
       <TableCell align="right">{user.email}</TableCell>
-      <TableCell align="right">{user.lastLoginDate}</TableCell>
       <TableCell align="right">{user.registrationDate}</TableCell>
+      <TableCell align="right">{user.lastLoginDate}</TableCell>
+      <TableCell align="right">{user.id}</TableCell>
       <TableCell align="right">{user.blockStatus.toString()}</TableCell>
     </TableRow>
   )
