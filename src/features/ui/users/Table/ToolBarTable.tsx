@@ -2,27 +2,23 @@ import BlockIcon from "@mui/icons-material/Block"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EngineeringIcon from "@mui/icons-material/Engineering"
 import LockOpenIcon from "@mui/icons-material/LockOpen"
+import LogoutIcon from "@mui/icons-material/Logout"
 import PersonIcon from "@mui/icons-material/Person"
 import IconButton from "@mui/material/IconButton"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
-import { useAppDispatch } from "../../../../common/hooks/storeHooks"
-import { logoutTC } from "../../../bll/reducers/authReducer"
-import { Navigate } from "react-router-dom"
-import LogoutIcon from "@mui/icons-material/Logout"
-import { useEffect } from "react"
-import { render } from "react-dom"
-import { Login } from "../../auth/login/Login"
-import { NavLink } from "react-router-dom"
 import { NavigateButton } from "../../../../common/components/nav-button/NavigateButton"
 import { RouterPath } from "../../../../common/components/routes/Routs"
+import { useAppDispatch } from "../../../../common/hooks/storeHooks"
+import { logoutTC } from "../../../bll/reducers/authReducer"
 
 export type ToolBarTableType = {
   numSelected: number
+  deleteUser: () => void
+  blockUser: () => void
 }
-export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected }) => {
+export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUser, deleteUser }) => {
   const dispatch = useAppDispatch()
-  let token = localStorage.getItem("token")
   const logoutHandler = () => {
     dispatch(logoutTC())
   }
@@ -61,10 +57,10 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected }) => {
       )}
       {numSelected > 0 ? (
         <div style={{ display: "flex" }}>
-          <IconButton>
+          <IconButton onClick={deleteUser}>
             <DeleteIcon color="error" />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={blockUser}>
             <BlockIcon color="secondary" />
           </IconButton>
           <IconButton>

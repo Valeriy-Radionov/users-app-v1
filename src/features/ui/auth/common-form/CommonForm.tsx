@@ -1,13 +1,13 @@
 import { Button, FormControl, FormGroup, Grid, TextField } from "@mui/material"
 import { useFormik } from "formik"
-import React from "react"
+import React, { useState } from "react"
 import { Navigate } from "react-router-dom"
-import { LoginDataType } from "../../../../api/authApi"
+import { LoginDataType, RegistrationDataType } from "../../../../api/authApi"
 import { NavigateButton } from "../../../../common/components/nav-button/NavigateButton"
 import { RouterPath } from "../../../../common/components/routes/Routs"
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks/storeHooks"
 import { validatorEmail, validatorRequiredValue } from "../../../../common/utils/validators/authValidators"
-import { loginTC } from "../../../bll/reducers/authReducer"
+import { loginTC, registrationTC } from "../../../bll/reducers/authReducer"
 export type FormikType = {
   email?: string
   password?: string
@@ -23,6 +23,7 @@ type CommonAuthFormType = {
 export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserName, rout, navLinkName, submitBtnname }) => {
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+  const isRegistration = useAppSelector((state) => state.auth.valueRegistration)
 
   const formik = useFormik({
     initialValues: {
@@ -34,7 +35,6 @@ export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserNa
       const errors: FormikType = {}
       validatorEmail(values.email, errors)
       validatorRequiredValue(values, errors, onValidatorUserName)
-      console.log(errors)
       return errors
     },
     onSubmit: (values) => {
@@ -42,8 +42,13 @@ export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserNa
         email: values.email,
         password: values.password,
       }
+      const regData: RegistrationDataType = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      }
       !onValidatorUserName && dispatch(loginTC(value))
-      console.log("On submit")
+      onValidatorUserName && dispatch(registrationTC(regData))
       formik.resetForm()
     },
   })
