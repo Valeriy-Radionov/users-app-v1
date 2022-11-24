@@ -27,7 +27,7 @@ const slice = createSlice({
         if (index !== -1) state.users.splice(index, 1)
       }
     },
-    blockUser(state, action: PayloadAction<{ id: string; isBlock: boolean }>) {
+    blockUserAC(state, action: PayloadAction<{ id: string; isBlock: boolean }>) {
       const index = state.users.findIndex((el) => el.id === action.payload.id)
       if (index !== -1) state.users[index].blockStatus = action.payload.isBlock
     },
@@ -37,7 +37,7 @@ const slice = createSlice({
 export const usersReducer = slice.reducer
 export const getUsers = slice.actions.getUsers
 export const deleteUser = slice.actions.deleteUser
-export const blockUser = slice.actions.blockUser
+export const blockUser = slice.actions.blockUserAC
 
 export const getUsersTC = createAsyncThunk("users/getUsers", async (token: string, thunkApi) => {
   thunkApi.dispatch(setAppStatusAC({ status: "loading" }))
@@ -58,14 +58,15 @@ export const getUsersTC = createAsyncThunk("users/getUsers", async (token: strin
   }
 })
 
-export const deleteUserTC = createAsyncThunk("users/deleteUsers", async (payload: { token: string; id: string; isAll?: boolean }, thunkApi) => {
+export const deleteUserTC = createAsyncThunk("users/deleteUsers", async (payload: { token: string; id: string; isAll: boolean }, thunkApi) => {
   thunkApi.dispatch(setAppStatusAC({ status: "loading" }))
   try {
     if (payload.token === payload.id) {
       localStorage.removeItem("token")
     }
-    if (payload.isAll === true) {
-      await usersApi.deleteUser(payload.id, true)
+    const response = await usersApi.deleteUser(payload.id, payload.isAll)
+    if (response.data.data.resultCode === 0) {
+      thunkApi.dispatch(deleteUser({ id: payload.id, isAll: payload.isAll }))
     }
     await usersApi.deleteUser(payload.id, false)
   } catch (e) {
@@ -75,13 +76,13 @@ export const deleteUserTC = createAsyncThunk("users/deleteUsers", async (payload
   }
 })
 
-export const blockUserTC = createAsyncThunk("users/blockUser", async (payload: { token: string; id: string; isBlock: boolean }, thunkApi) => {
+export const blockUserTC = createAsyncThunk("users/blockUser", async (payload: { token: string; id: string; isBlock: boolean; isAll: boolean }, thunkApi) => {
   thunkApi.dispatch(setAppStatusAC({ status: "loading" }))
   try {
     if (payload.token === payload.id) {
       localStorage.removeItem("token")
     }
-    await usersApi.blockUser(payload.id, payload.isBlock)
+    const response = await usersApi.blockUser(payload.id, payload.isBlock, payload.isAll)
   } catch (e) {
     handleServerNetworkError(e, thunkApi.dispatch)
   } finally {

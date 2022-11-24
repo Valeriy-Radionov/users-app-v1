@@ -62,10 +62,10 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUse
           <IconButton onClick={deleteUser}>
             <DeleteIcon color="error" />
           </IconButton>
-          <IconButton onClick={blockUser} disabled={disabled}>
+          <IconButton onClick={blockUser}>
             <BlockIcon color="secondary" />
           </IconButton>
-          <IconButton onClick={unblockUser} disabled={disabled}>
+          <IconButton onClick={unblockUser}>
             <LockOpenIcon color="success" />
           </IconButton>
         </div>

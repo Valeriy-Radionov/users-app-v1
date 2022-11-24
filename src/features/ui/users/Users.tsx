@@ -38,7 +38,7 @@ export const Users = () => {
   const deleteUser = () => {
     createAction(users, selected, "delete", dispatch)
     dispatch(getUsersTC(token!))
-    setSelected([])
+    // setSelected([])
   }
   const blockUser = () => {
     createAction(users, selected, "block", dispatch)
@@ -61,7 +61,7 @@ export const Users = () => {
   }
 
   useEffect(() => {
-    token && dispatch(getUsersTC(token!))
+    dispatch(getUsersTC(token!))
   }, [])
 
   if (!token) {

@@ -24,13 +24,13 @@ const blockUser = (
   isBlock: boolean
 ) => {
   if (selected.length === users.length) {
-    dispatch(blockUserTC({ token: currentToken!, id: currentToken!, isBlock: isBlock }))
+    dispatch(blockUserTC({ token: currentToken!, id: currentToken!, isBlock: isBlock, isAll: true }))
   } else {
     if (selectedUser && currentToken === id) {
-      dispatch(blockUserTC({ token: currentToken, id: id, isBlock: isBlock }))
+      dispatch(blockUserTC({ token: currentToken, id: id, isBlock: isBlock, isAll: false }))
       localStorage.removeItem("token")
     }
-    id && dispatch(blockUserTC({ token: currentToken!, id: id, isBlock: isBlock }))
+    id && dispatch(blockUserTC({ token: currentToken!, id: id, isBlock: isBlock, isAll: false }))
   }
 }
 export const createAction = (users: UserDataType[], selected: readonly string[], action: "delete" | "block" | "unblock", dispatch: dispatchType) => {
