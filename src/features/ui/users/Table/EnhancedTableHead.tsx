@@ -49,7 +49,7 @@ export const EnhancedTableHead = (props: EnhancedTableProps) => {
   ]
 
   return (
-    <TableHead sx={{ bgcolor: "#9aa2e5" }}>
+    <TableHead sx={{ border: "2px solid black" }}>
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox

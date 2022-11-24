@@ -16,8 +16,9 @@ export type ToolBarTableType = {
   numSelected: number
   deleteUser: () => void
   blockUser: () => void
+  unblockUser: () => void
 }
-export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUser, deleteUser }) => {
+export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUser, deleteUser, unblockUser }) => {
   const dispatch = useAppDispatch()
   const logoutHandler = () => {
     dispatch(logoutTC())
@@ -31,7 +32,6 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUse
         border: "2px solid",
         borderRadius: "5px",
         borderColor: "#6a77d9",
-        bgcolor: "#9aa2e5",
         margin: "10px auto",
         width: "85%",
       }}
@@ -63,7 +63,7 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUse
           <IconButton onClick={blockUser}>
             <BlockIcon color="secondary" />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={unblockUser}>
             <LockOpenIcon color="success" />
           </IconButton>
         </div>
