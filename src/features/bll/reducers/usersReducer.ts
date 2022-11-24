@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { isBlock } from "typescript"
 import { UserDataType } from "../../../api/authApi"
 import { usersApi } from "../../../api/usersApi"
 import { handleServerNetworkError } from "../../../common/utils/axios-error/axiosErrorUtils"
@@ -10,7 +9,7 @@ export type UsersStateType = {
 }
 
 const initialState: UsersStateType = {
-  users: [{ id: "1233fvghgyt", name: "gtgtgtt", email: "rtr@mfgr.com", lastLoginDate: "lastDate", isAuth: false, blockStatus: false, password: "121212ww", registrationDate: "redDate" }],
+  users: [{ id: "test", name: "test", email: "test", lastLoginDate: "test", isAuth: false, blockStatus: false, password: "test", registrationDate: "test" }],
 }
 
 const slice = createSlice({
@@ -46,9 +45,7 @@ export const getUsersTC = createAsyncThunk("users/getUsers", async (token: strin
     if (token) {
       const response = await usersApi.getUsers()
       if (response.data) {
-        console.log(response.data)
         thunkApi.dispatch(getUsers({ users: response.data }))
-
         thunkApi.dispatch(setAppStatusAC({ status: "succeeded" }))
       } else {
         thunkApi.dispatch(setAppStatusAC({ status: "failed" }))
@@ -84,7 +81,7 @@ export const blockUserTC = createAsyncThunk("users/blockUser", async (payload: {
     if (payload.token === payload.id) {
       localStorage.removeItem("token")
     }
-    const response = await usersApi.blockUser(payload.id, payload.isBlock)
+    await usersApi.blockUser(payload.id, payload.isBlock)
   } catch (e) {
     handleServerNetworkError(e, thunkApi.dispatch)
   } finally {

@@ -66,10 +66,8 @@ export const registra_tionTC = (data: RegistrationDataType) => async (dispatch: 
   dispatch(setAppStatusAC({ status: "loading" }))
   try {
     const response = await authApi.registration(data)
-
     dispatch(setIsLoggedIn({ isLoggedIn: true }))
     if (response.data) dispatch(setAppStatusAC({ status: "succeeded" }))
-    // dispatch(setCurrentUser(response.data))
   } catch (e) {
     handleServerNetworkError(e, dispatch)
   } finally {

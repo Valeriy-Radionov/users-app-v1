@@ -1,6 +1,6 @@
 import { Button, FormControl, FormGroup, Grid, TextField } from "@mui/material"
 import { useFormik } from "formik"
-import React, { useState } from "react"
+import React from "react"
 import { Navigate } from "react-router-dom"
 import { LoginDataType, RegistrationDataType } from "../../../../api/authApi"
 import { NavigateButton } from "../../../../common/components/nav-button/NavigateButton"
@@ -23,7 +23,6 @@ type CommonAuthFormType = {
 export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserName, rout, navLinkName, submitBtnname }) => {
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
-  const isRegistration = useAppSelector((state) => state.auth.valueRegistration)
 
   const formik = useFormik({
     initialValues: {

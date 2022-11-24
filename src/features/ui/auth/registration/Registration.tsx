@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Navigate } from "react-router-dom"
 import { RouterPath } from "../../../../common/components/routes/Routs"
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks/storeHooks"
