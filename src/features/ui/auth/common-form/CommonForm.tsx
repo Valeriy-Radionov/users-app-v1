@@ -52,7 +52,7 @@ export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserNa
     },
   })
   if (isLoggedIn) {
-    return <Navigate to={"/users"} />
+    return <Navigate key={"usersTable"} to={"/users"} />
   }
   return (
     <Grid container justifyContent={"center"} alignItems={"center"} sx={{ height: "40vh" }}>

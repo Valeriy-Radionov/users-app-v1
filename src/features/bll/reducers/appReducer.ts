@@ -50,7 +50,6 @@ export const isInitializedTC = createAsyncThunk("app/initialized", async (token:
     }
   } catch (e) {
     thunkApi.dispatch(setAppInitializedAC({ isInitialized: true }))
-
     handleServerNetworkError(e, thunkApi.dispatch)
   } finally {
     thunkApi.dispatch(setAppInitializedAC({ isInitialized: true }))
