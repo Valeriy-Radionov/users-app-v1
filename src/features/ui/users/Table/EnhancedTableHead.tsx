@@ -1,4 +1,4 @@
-import { TableHead, TableRow, TableCell, Checkbox } from "@mui/material"
+import { Checkbox, TableCell, TableHead, TableRow } from "@mui/material"
 import { HeadCell } from "../Users"
 
 export type EnhancedTableProps = {
@@ -10,42 +10,12 @@ export const EnhancedTableHead = (props: EnhancedTableProps) => {
   const { onSelectAllClick, numSelected, rowCount } = props
 
   const headCells: readonly HeadCell[] = [
-    {
-      id: "name",
-      numeric: false,
-      disablePadding: true,
-      label: "Name",
-    },
-    {
-      id: "email",
-      numeric: true,
-      disablePadding: false,
-      label: "Email",
-    },
-    {
-      id: "firstDate",
-      numeric: true,
-      disablePadding: false,
-      label: "Date of registration",
-    },
-    {
-      id: "lastDate",
-      numeric: true,
-      disablePadding: false,
-      label: "Last login date",
-    },
-    {
-      id: "userId",
-      numeric: true,
-      disablePadding: false,
-      label: "Id",
-    },
-    {
-      id: "status",
-      numeric: true,
-      disablePadding: false,
-      label: "Status",
-    },
+    { id: "name", numeric: false, disablePadding: true, label: "Name" },
+    { id: "email", numeric: true, disablePadding: false, label: "Email" },
+    { id: "firstDate", numeric: true, disablePadding: false, label: "Date of registration" },
+    { id: "lastDate", numeric: true, disablePadding: false, label: "Last login date" },
+    { id: "userId", numeric: true, disablePadding: false, label: "Id" },
+    { id: "status", numeric: true, disablePadding: false, label: "Status" },
   ]
 
   return (

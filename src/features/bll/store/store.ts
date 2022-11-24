@@ -1,7 +1,7 @@
-import { Action, combineReducers, configureStore } from "@reduxjs/toolkit"
+import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import thunkMiddleware from "redux-thunk"
 import { appReducer } from "../reducers/appReducer"
 import { authReducer } from "../reducers/authReducer"
-import thunkMiddleware from "redux-thunk"
 import { usersReducer } from "../reducers/usersReducer"
 
 export type AppDispatch = typeof store.dispatch

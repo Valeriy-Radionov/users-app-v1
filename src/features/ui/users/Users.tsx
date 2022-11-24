@@ -33,6 +33,7 @@ export const Users = () => {
   const dispatch = useAppDispatch()
   const users = useAppSelector((state) => state.users.users)
   const [selected, setSelected] = useState<readonly string[]>([])
+  const isSelected = (name: string) => selected.indexOf(name) !== -1
 
   const deleteUser = () => {
     createAction(users, selected, "delete", dispatch)
@@ -63,12 +64,8 @@ export const Users = () => {
     token && dispatch(getUsersTC(token!))
   }, [])
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1
   if (!token) {
     return <Navigate to="/login" />
-  }
-  if (!token) {
-    return <Navigate to={"login"} />
   }
 
   return (
