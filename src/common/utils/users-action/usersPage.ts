@@ -1,6 +1,5 @@
-import { ThunkDispatch } from "@reduxjs/toolkit"
 import { UserDataType } from "../../../api/authApi"
-import { blockUserTC, deleteUserTC } from "../../../features/bll/reducers/usersReducer"
+import { blockUserTC, deleteUserTC, getUsersTC } from "../../../features/bll/reducers/usersReducer"
 import { useAppDispatch } from "../../hooks/storeHooks"
 
 type dispatchType = ReturnType<typeof useAppDispatch>
@@ -38,7 +37,6 @@ export const createAction = (users: UserDataType[], selected: readonly string[],
   const selectedUser = users.find((el) => selected[0] === el.name)
   const id = selectedUser?.id
   const currentToken = localStorage.getItem("token")
-
   if (action === "delete") {
     deleteUser(users, selected, selectedUser, currentToken, id, dispatch)
   } else if (action === "block") {
@@ -46,4 +44,5 @@ export const createAction = (users: UserDataType[], selected: readonly string[],
   } else {
     blockUser(users, selected, currentToken, selectedUser, id, dispatch, false)
   }
+  dispatch(getUsersTC(currentToken!))
 }
