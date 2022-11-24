@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "../../../common/hooks/storeHooks
 import { deleteUserTC, getUsersTC } from "../../bll/reducers/usersReducer"
 import { UserDataType } from "../../../api/authApi"
 import { UsersTableBody } from "./table/TableBody"
+import { createAction } from "../../../common/utils/users-action/usersPage"
 
 export type Data = {
   userId: string
@@ -41,20 +42,17 @@ export const Users = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const deleteUser = () => {
-    const selectedUser = users.find((el) => selected[0] === el.name)
-    const id = selectedUser?.id
-    const currentToken = localStorage.getItem("token")
-    if (selected.length === users.length) {
-      dispatch(deleteUserTC({ token: currentToken!, id: currentToken!, isAll: true }))
-    } else {
-      if (selectedUser && currentToken === id) {
-        dispatch(deleteUserTC({ token: currentToken, id: id, isAll: false }))
-        localStorage.removeItem("token")
-      }
-      id && dispatch(deleteUserTC({ token: token!, id: id, isAll: false }))
-    }
+    createAction(users, selected, "delete", dispatch)
+    dispatch(getUsersTC(token!))
   }
-  const blockUser = () => {}
+  const blockUser = () => {
+    createAction(users, selected, "block", dispatch)
+    dispatch(getUsersTC(token!))
+  }
+  const unblockUser = () => {
+    createAction(users, selected, "unblock", dispatch)
+    dispatch(getUsersTC(token!))
+  }
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -75,8 +73,8 @@ export const Users = () => {
   }
 
   useEffect(() => {
-    token && dispatch(getUsersTC(token))
-  }, [dispatch, deleteUser])
+    token && dispatch(getUsersTC(token!))
+  }, [dispatch])
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
   if (!token) {
@@ -88,9 +86,9 @@ export const Users = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <ToolBarTable numSelected={selected.length} blockUser={blockUser} deleteUser={deleteUser} />
+      <ToolBarTable numSelected={selected.length} blockUser={blockUser} deleteUser={deleteUser} unblockUser={unblockUser} />
       <Paper sx={{ width: "90%", mb: 2, margin: "0 auto" }}>
-        <TableContainer sx={{ border: "2px solid #9aa2e5" }}>
+        <TableContainer>
           <Table aria-labelledby="tableTitle" size={"medium"}>
             <EnhancedTableHead numSelected={selected.length} onSelectAllClick={handleSelectAllClick} rowCount={users.length} />
             <TableBody>
