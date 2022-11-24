@@ -17,8 +17,10 @@ export type ToolBarTableType = {
   deleteUser: () => void
   blockUser: () => void
   unblockUser: () => void
+  selected: readonly string[]
 }
-export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUser, deleteUser, unblockUser }) => {
+export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUser, deleteUser, unblockUser, selected }) => {
+  let disabled = selected.length > 1
   const dispatch = useAppDispatch()
   const logoutHandler = () => {
     dispatch(logoutTC())
@@ -32,8 +34,8 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUse
         border: "2px solid",
         borderRadius: "5px",
         borderColor: "#6a77d9",
+        bgcolor: "#9aa2e5",
         margin: "10px auto",
-        width: "85%",
       }}
     >
       {numSelected > 0 ? (
@@ -60,10 +62,10 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUse
           <IconButton onClick={deleteUser}>
             <DeleteIcon color="error" />
           </IconButton>
-          <IconButton onClick={blockUser}>
+          <IconButton onClick={blockUser} disabled={disabled}>
             <BlockIcon color="secondary" />
           </IconButton>
-          <IconButton onClick={unblockUser}>
+          <IconButton onClick={unblockUser} disabled={disabled}>
             <LockOpenIcon color="success" />
           </IconButton>
         </div>
@@ -74,7 +76,7 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUse
         </div>
       )}
       <NavigateButton rout={RouterPath.login} callback={logoutHandler}>
-        <LogoutIcon fontSize="large" style={{ color: "#13D170", background: "#afeafa" }} sx={{ boxShadow: 5, borderRadius: "5px", border: "2px solid #51d8fc" }} />
+        <LogoutIcon fontSize="large" style={{ color: "white", background: "green" }} sx={{ boxShadow: 5, borderRadius: "5px", border: "whitesmoke" }} />
       </NavigateButton>
     </Toolbar>
   )

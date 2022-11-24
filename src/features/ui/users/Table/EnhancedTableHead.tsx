@@ -51,7 +51,7 @@ export const EnhancedTableHead = (props: EnhancedTableProps) => {
   return (
     <TableHead sx={{ border: "2px solid black" }}>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell padding="checkbox" sx={{ fontSize: "20px" }}>
           <Checkbox
             color="error"
             indeterminate={numSelected > 0 && numSelected < rowCount}

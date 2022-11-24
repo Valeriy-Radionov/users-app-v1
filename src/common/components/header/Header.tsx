@@ -11,21 +11,13 @@ import { logoutTC } from "../../../features/bll/reducers/authReducer"
 import { Satellite } from "@mui/icons-material"
 
 export const Header = () => {
-  const dispatch = useAppDispatch()
-  const [auth, setAuth] = React.useState(true)
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="sticky" style={{ background: "#6a77d9" }}>
         <Toolbar>
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            Users App
+            Valeriy Radionov
           </Typography>
-          {auth && (
-            <Typography variant="h5" component="div" sx={{ flexGrow: 0, paddingRight: 2 }}>
-              Name user
-            </Typography>
-          )}
         </Toolbar>
       </AppBar>
     </Box>
