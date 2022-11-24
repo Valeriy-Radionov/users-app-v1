@@ -7,11 +7,19 @@ export const usersApi = {
   getUsers() {
     return baseInstance.get<UserDataType[], AxiosResponse<UserDataType[]>>(usersUrl)
   },
-  deleteUser(id: string, isAll: boolean) {
-    return baseInstance.delete<AxiosResponse<InfoResponseType>>(`${usersUrl}/${id}/${isAll}`)
+  deleteUser(deleteData: DeleteResponseType) {
+    return baseInstance.put<DeleteResponseType, AxiosResponse<InfoResponseType>>(`${usersUrl}`, deleteData)
   },
 
-  blockUser(id: string, isBlocked: boolean, isAll: boolean) {
-    return baseInstance.put<{ id: string; isBlocked: boolean; isAll: boolean }, AxiosResponse<InfoResponseType>>(`${usersUrl}/${id}/${isBlocked.toString()}/${isAll.toString()}`)
+  blockUser(blockData: BlockUserType) {
+    return baseInstance.put<BlockUserType, AxiosResponse<InfoResponseType>>(`${usersUrl}/block`, blockData)
   },
+}
+
+type DeleteResponseType = {
+  id: readonly string[]
+}
+type BlockUserType = {
+  id: readonly string[]
+  isBlocked: boolean
 }

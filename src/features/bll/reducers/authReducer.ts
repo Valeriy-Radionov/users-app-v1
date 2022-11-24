@@ -78,7 +78,7 @@ export const registra_tionTC = (data: RegistrationDataType) => async (dispatch: 
 export const registrationTC = createAsyncThunk("auth/registration", async (payload: RegistrationDataType, thunkApi) => {
   thunkApi.dispatch(setAppStatusAC({ status: "loading" }))
   try {
-    const currentUser = await await authApi.registration(payload)
+    const currentUser = await authApi.registration(payload)
     if (currentUser) {
       thunkApi.dispatch(setRegistration({ value: true }))
     }

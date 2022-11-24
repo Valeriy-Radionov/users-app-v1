@@ -6,8 +6,7 @@ import TableContainer from "@mui/material/TableContainer"
 import React, { useEffect, useState } from "react"
 import { Navigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../../common/hooks/storeHooks"
-import { createAction } from "../../../common/utils/users-action/usersPage"
-import { getUsersTC } from "../../bll/reducers/usersReducer"
+import { blockUserTC, deleteUserTC, getUsersTC } from "../../bll/reducers/usersReducer"
 import { EnhancedTableHead } from "./table/EnhancedTableHead"
 import { UsersTableBody } from "./table/TableBody"
 import { ToolBarTable } from "./table/ToolBarTable"
@@ -36,24 +35,18 @@ export const Users = () => {
   const isSelected = (name: string) => selected.indexOf(name) !== -1
 
   const deleteUser = () => {
-    createAction(users, selected, "delete", dispatch)
-    dispatch(getUsersTC(token!))
-    // setSelected([])
+    dispatch(deleteUserTC({ token, id: selected }))
   }
   const blockUser = () => {
-    createAction(users, selected, "block", dispatch)
-    dispatch(getUsersTC(token!))
-    setSelected([])
+    dispatch(blockUserTC({ token, id: selected, isBlock: true, unblock: false }))
   }
   const unblockUser = () => {
-    createAction(users, selected, "unblock", dispatch)
-    dispatch(getUsersTC(token!))
-    setSelected([])
+    dispatch(blockUserTC({ token, id: selected, isBlock: false, unblock: true }))
   }
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = users.map((n) => n.name)
+      const newSelected = users.map((n) => n.id)
       setSelected(newSelected)
       return
     }
@@ -61,26 +54,25 @@ export const Users = () => {
   }
 
   useEffect(() => {
-    dispatch(getUsersTC(token!))
+    token && dispatch(getUsersTC(token))
   }, [])
 
   if (!token) {
-    return <Navigate to="/login" />
+    return <Navigate key={"logoutUser"} to="/login" />
   }
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "90%", mb: 2, margin: "0 auto" }}>
         <ToolBarTable numSelected={selected.length} blockUser={blockUser} deleteUser={deleteUser} unblockUser={unblockUser} selected={selected} />
-
         <TableContainer sx={{ borderRadius: "5px" }}>
           <Table aria-labelledby="tableTitle" size={"medium"} sx={{ border: "2px solid black" }}>
             <EnhancedTableHead numSelected={selected.length} onSelectAllClick={handleSelectAllClick} rowCount={users.length} />
             <TableBody>
               {users.map((user) => {
-                const isItemSelected = isSelected(user.name)
-                const labelId = user.id
-                return <UsersTableBody key={user.id} isItemSelected={isItemSelected} selected={selected} setSelected={setSelected} user={user} labelId={labelId} />
+                const isItemSelected = isSelected(user.id)
+                const labelId = user.name
+                return <UsersTableBody key={user.name} isItemSelected={isItemSelected} selected={selected} setSelected={setSelected} user={user} labelId={labelId} />
               })}
             </TableBody>
           </Table>

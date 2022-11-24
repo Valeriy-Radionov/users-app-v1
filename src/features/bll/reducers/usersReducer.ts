@@ -19,17 +19,19 @@ const slice = createSlice({
     getUsers(state, action: PayloadAction<{ users: UserDataType[] }>) {
       state.users = action.payload.users
     },
-    deleteUser(state, action: PayloadAction<{ id: string; isAll: boolean }>) {
-      if (action.payload.isAll === true) {
-        state.users = []
-      } else {
-        const index = state.users.findIndex((el) => el.id === action.payload.id)
-        if (index !== -1) state.users.splice(index, 1)
-      }
+    deleteUser(state, action: PayloadAction<{ id: readonly string[] }>) {
+      action.payload.id.map((el) => {
+        state.users.filter((user) => user.id !== el)
+      })
     },
-    blockUserAC(state, action: PayloadAction<{ id: string; isBlock: boolean }>) {
-      const index = state.users.findIndex((el) => el.id === action.payload.id)
-      if (index !== -1) state.users[index].blockStatus = action.payload.isBlock
+    blockUserAC(state, action: PayloadAction<{ id: readonly string[]; isBlock: boolean }>) {
+      action.payload.id.map((el) => {
+        return state.users.map((user) => {
+          if (user.id === el) {
+            user.blockStatus = action.payload.isBlock
+          }
+        })
+      })
     },
   },
 })
@@ -58,17 +60,18 @@ export const getUsersTC = createAsyncThunk("users/getUsers", async (token: strin
   }
 })
 
-export const deleteUserTC = createAsyncThunk("users/deleteUsers", async (payload: { token: string; id: string; isAll: boolean }, thunkApi) => {
+export const deleteUserTC = createAsyncThunk("users/deleteUsers", async (payload: { token: string | null; id: readonly string[] }, thunkApi) => {
   thunkApi.dispatch(setAppStatusAC({ status: "loading" }))
   try {
-    if (payload.token === payload.id) {
-      localStorage.removeItem("token")
+    if (payload.token) {
+      payload.id.map((el) => {
+        el === payload.token && localStorage.removeItem("token")
+      })
     }
-    const response = await usersApi.deleteUser(payload.id, payload.isAll)
-    if (response.data.data.resultCode === 0) {
-      thunkApi.dispatch(deleteUser({ id: payload.id, isAll: payload.isAll }))
+    const response = await usersApi.deleteUser({ id: payload.id })
+    if (response.data.resultCode === 0) {
+      thunkApi.dispatch(deleteUser({ id: payload.id }))
     }
-    await usersApi.deleteUser(payload.id, false)
   } catch (e) {
     handleServerNetworkError(e, thunkApi.dispatch)
   } finally {
@@ -76,13 +79,18 @@ export const deleteUserTC = createAsyncThunk("users/deleteUsers", async (payload
   }
 })
 
-export const blockUserTC = createAsyncThunk("users/blockUser", async (payload: { token: string; id: string; isBlock: boolean; isAll: boolean }, thunkApi) => {
+export const blockUserTC = createAsyncThunk("users/blockUser", async (payload: { token: string | null; id: readonly string[]; isBlock: boolean; unblock: boolean }, thunkApi) => {
   thunkApi.dispatch(setAppStatusAC({ status: "loading" }))
   try {
-    if (payload.token === payload.id) {
-      localStorage.removeItem("token")
+    if (payload.token && payload.unblock === false) {
+      payload.id.map((el) => {
+        el === payload.token && localStorage.removeItem("token")
+      })
     }
-    const response = await usersApi.blockUser(payload.id, payload.isBlock, payload.isAll)
+    const response = await usersApi.blockUser({ id: payload.id, isBlocked: payload.isBlock })
+    if (response.data.resultCode === 0) {
+      thunkApi.dispatch(blockUser({ id: payload.id, isBlock: payload.isBlock }))
+    }
   } catch (e) {
     handleServerNetworkError(e, thunkApi.dispatch)
   } finally {
