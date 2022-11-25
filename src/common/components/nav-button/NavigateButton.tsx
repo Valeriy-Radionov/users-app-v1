@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button"
 import React, { ReactNode } from "react"
 import { NavLink } from "react-router-dom"
 import { RouterPath } from "../routes/Routs"
@@ -12,7 +11,7 @@ type NavigateButtonPropsType = {
 }
 export const NavigateButton: React.FC<NavigateButtonPropsType> = ({ rout, name, callback, type, children }) => {
   return (
-    <NavLink type={type} to={rout} style={{ color: "#6a77d9", textAlign: "center", padding: "10px" }} onClick={callback}>
+    <NavLink type={type} to={rout} style={{ color: "white", textAlign: "center", padding: "10px" }} onClick={callback}>
       {children}
       {name}
     </NavLink>

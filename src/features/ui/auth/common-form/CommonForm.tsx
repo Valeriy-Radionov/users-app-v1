@@ -2,12 +2,12 @@ import { Button, FormControl, FormGroup, Grid, TextField } from "@mui/material"
 import { useFormik } from "formik"
 import React from "react"
 import { Navigate } from "react-router-dom"
-import { LoginDataType, RegistrationDataType } from "../../../../api/authApi"
+import { LoginDataType } from "../../../../api/authApi"
 import { NavigateButton } from "../../../../common/components/nav-button/NavigateButton"
 import { RouterPath } from "../../../../common/components/routes/Routs"
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks/storeHooks"
 import { validatorEmail, validatorRequiredValue } from "../../../../common/utils/validators/authValidators"
-import { loginTC, registrationTC } from "../../../bll/reducers/authReducer"
+import { loginTC } from "../../../bll/reducers/authReducer"
 export type FormikType = {
   email?: string
   password?: string
@@ -16,11 +16,10 @@ export type FormikType = {
 type CommonAuthFormType = {
   rout: RouterPath.login | RouterPath.registr
   navLinkName: string
-  onValidatorUserName?: boolean
   submitBtnname: string
 }
 
-export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserName, rout, navLinkName, submitBtnname }) => {
+export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ rout, navLinkName, submitBtnname }) => {
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
 
@@ -28,12 +27,11 @@ export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserNa
     initialValues: {
       email: "",
       password: "",
-      name: "",
     },
     validate: (values) => {
       const errors: FormikType = {}
       validatorEmail(values.email, errors)
-      validatorRequiredValue(values, errors, onValidatorUserName)
+      validatorRequiredValue(values, errors, false)
       return errors
     },
     onSubmit: (values) => {
@@ -41,13 +39,7 @@ export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserNa
         email: values.email,
         password: values.password,
       }
-      const regData: RegistrationDataType = {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      }
-      !onValidatorUserName && dispatch(loginTC(value))
-      onValidatorUserName && dispatch(registrationTC(regData))
+      dispatch(loginTC(value))
       formik.resetForm()
     },
   })
@@ -58,18 +50,31 @@ export const CommonAuthForm: React.FC<CommonAuthFormType> = ({ onValidatorUserNa
     <Grid container justifyContent={"center"} alignItems={"center"} sx={{ height: "40vh" }}>
       <Grid item justifyContent={"center"} alignItems={"center"}>
         <form onSubmit={formik.handleSubmit} style={{ textAlign: "center" }}>
-          <FormControl sx={{ width: "300px", bgcolor: "#c5d0d1", marginTop: "50px", borderRadius: "5px" }}>
+          <FormControl
+            sx={{
+              width: "350px",
+              bgcolor: "rgb(181,154,255)",
+              background: "linear-gradient(0deg, rgba(181,154,255,1) 17%, rgba(121,186,247,0.8) 61%)",
+              marginTop: "50px",
+              borderRadius: "5px",
+            }}
+          >
             <FormGroup sx={{ margin: "20px" }}>
-              {onValidatorUserName ? <h2 style={{ textAlign: "center" }}>Enter your registration data</h2> : <h2>Enter your email address and password</h2>}
-              {onValidatorUserName && <TextField label="User name" margin="normal" {...formik.getFieldProps("name")} />}
-              {formik.touched.name && formik.errors.name && onValidatorUserName && <div style={{ color: "red", padding: "0px 0px 10px 5px" }}>{formik.errors.name}</div>}
-
+              <h2 style={{ color: "white" }}>Enter your email address and password</h2>
               <TextField label="Email" margin="normal" {...formik.getFieldProps("email")} />
               {formik.touched.email && formik.errors.email && <div style={{ color: "red", padding: "0px 0px 10px 5px" }}>{formik.errors.email}</div>}
-
               <TextField type="password" label="Password" margin="normal" {...formik.getFieldProps("password")} />
               {formik.touched.password && formik.errors.password && <div style={{ color: "red", padding: "0px 0px 10px 5px" }}>{formik.errors.password}</div>}
-              <Button type={"submit"} variant={"contained"} sx={{ bgcolor: "#6a77d9" }}>
+              <Button
+                type={"submit"}
+                variant={"contained"}
+                sx={{
+                  bgcolor: "rgb(181,154,255)",
+                  ":hover": {
+                    bgcolor: "rgba(121,186,247,0.4)",
+                  },
+                }}
+              >
                 {submitBtnname}
               </Button>
             </FormGroup>

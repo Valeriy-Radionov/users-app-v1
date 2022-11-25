@@ -26,12 +26,16 @@ const slice = createSlice({
     setRegistration(state, action: PayloadAction<{ value: boolean }>) {
       state.valueRegistration = action.payload.value
     },
+    deleteRegData(state, action: PayloadAction<{ value: boolean }>) {
+      state.valueRegistration = action.payload.value
+    },
   },
 })
 
 export const setIsLoggedIn = slice.actions.setIsLoggedIn
 export const setCurrentUser = slice.actions.setCurrentUser
 export const setRegistration = slice.actions.setRegistration
+export const deleteRegData = slice.actions.deleteRegData
 export const authReducer = slice.reducer
 
 export const loginTC = (data: LoginDataType) => async (dispatch: Dispatch) => {
@@ -55,19 +59,6 @@ export const logoutTC = () => async (dispatch: Dispatch) => {
     dispatch(setIsLoggedIn({ isLoggedIn: false }))
     dispatch(setCurrentUser({ currentUser: null }))
     localStorage.removeItem("token")
-  } catch (e) {
-    handleServerNetworkError(e, dispatch)
-  } finally {
-    dispatch(setAppStatusAC({ status: "idle" }))
-  }
-}
-
-export const registra_tionTC = (data: RegistrationDataType) => async (dispatch: Dispatch) => {
-  dispatch(setAppStatusAC({ status: "loading" }))
-  try {
-    const response = await authApi.registration(data)
-    dispatch(setIsLoggedIn({ isLoggedIn: true }))
-    if (response.data) dispatch(setAppStatusAC({ status: "succeeded" }))
   } catch (e) {
     handleServerNetworkError(e, dispatch)
   } finally {

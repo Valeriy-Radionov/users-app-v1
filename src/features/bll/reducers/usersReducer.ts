@@ -20,10 +20,15 @@ const slice = createSlice({
       state.users = action.payload.users
     },
     deleteUser(state, action: PayloadAction<{ id: readonly string[] }>) {
-      action.payload.id.map((el) => {
-        state.users.filter((user) => user.id !== el)
+      state.users.map((user, index) => {
+        action.payload.id.map((id) => {
+          if (user.id === id) {
+            state.users.splice(index, 1)
+          }
+        })
       })
     },
+
     blockUserAC(state, action: PayloadAction<{ id: readonly string[]; isBlock: boolean }>) {
       action.payload.id.map((el) => {
         return state.users.map((user) => {

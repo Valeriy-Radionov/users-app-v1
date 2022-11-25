@@ -9,6 +9,5 @@ export const Login = () => {
   useEffect(() => {
     dispatch(deleteRegData({ value: false }))
   }, [])
-
-  return <CommonAuthForm navLinkName="Registration" rout={RouterPath.registr} submitBtnname="LOGIN" onValidatorUserName={false} />
+  return <CommonAuthForm navLinkName="Registration" rout={RouterPath.registr} submitBtnname="LOGIN" />
 }

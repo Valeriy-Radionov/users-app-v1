@@ -20,7 +20,6 @@ export type ToolBarTableType = {
   selected: readonly string[]
 }
 export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUser, deleteUser, unblockUser, selected }) => {
-  let disabled = selected.length > 1
   const dispatch = useAppDispatch()
   const logoutHandler = () => {
     dispatch(logoutTC())
@@ -34,49 +33,39 @@ export const ToolBarTable: React.FC<ToolBarTableType> = ({ numSelected, blockUse
         border: "2px solid",
         borderRadius: "5px",
         borderColor: "#6a77d9",
-        bgcolor: "#9aa2e5",
+        bgcolor: "rgb(181,154,255)",
+        background: "linear-gradient(0deg, rgba(181,154,255,1) 17%, rgba(121,186,247,0.8) 61%)",
         margin: "10px auto",
       }}
     >
-      {numSelected > 0 ? (
-        <Typography sx={{ flex: "1 1 100%" }} color="inherit" variant="subtitle1" component="div">
-          <div style={{ display: "flex" }}>
-            <div>Selected {numSelected}</div>
-            <div>
-              <PersonIcon></PersonIcon>
-            </div>
+      <Typography sx={{ flex: "1 1 100%", color: "white", fontSize: "18px" }} color="inherit" variant="subtitle1" component="div">
+        <div style={{ display: "flex" }}>
+          <div>Selected {numSelected}</div>
+          <div>
+            <PersonIcon></PersonIcon>
           </div>
-        </Typography>
-      ) : (
-        <Typography sx={{ flex: "1 1 100%" }} variant="subtitle1" id="tableTitle" component="div">
-          <div style={{ display: "flex" }}>
-            <div>Selected {numSelected}</div>
-            <div>
-              <PersonIcon></PersonIcon>
-            </div>
-          </div>
-        </Typography>
-      )}
+        </div>
+      </Typography>
       {numSelected > 0 ? (
         <div style={{ display: "flex" }}>
           <IconButton onClick={deleteUser}>
-            <DeleteIcon color="error" />
+            <DeleteIcon fontSize="large" color="error" />
           </IconButton>
           <IconButton onClick={blockUser}>
-            <BlockIcon color="secondary" />
+            <BlockIcon fontSize="large" color="secondary" />
           </IconButton>
           <IconButton onClick={unblockUser}>
-            <LockOpenIcon color="success" />
+            <LockOpenIcon fontSize="large" color="success" />
           </IconButton>
         </div>
       ) : (
-        <div>
+        <div style={{ color: "white", fontSize: "18px" }}>
           <span>No actions</span>
           <EngineeringIcon></EngineeringIcon>
         </div>
       )}
       <NavigateButton rout={RouterPath.login} callback={logoutHandler}>
-        <LogoutIcon fontSize="large" style={{ color: "white", background: "green" }} sx={{ boxShadow: 5, borderRadius: "5px", border: "whitesmoke" }} />
+        <LogoutIcon fontSize="large" style={{ color: "white" }} sx={{ boxShadow: 5, borderRadius: "5px", border: "whitesmoke", ":hover": { bgcolor: "rgb(181,154,255)" } }} />
       </NavigateButton>
     </Toolbar>
   )

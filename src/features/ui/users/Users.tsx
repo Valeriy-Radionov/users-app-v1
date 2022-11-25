@@ -4,8 +4,10 @@ import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableContainer from "@mui/material/TableContainer"
 import React, { useEffect, useState } from "react"
-import { Navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { RouterPath } from "../../../common/components/routes/Routs"
 import { useAppDispatch, useAppSelector } from "../../../common/hooks/storeHooks"
+import { setIsLoggedIn } from "../../bll/reducers/authReducer"
 import { blockUserTC, deleteUserTC, getUsersTC } from "../../bll/reducers/usersReducer"
 import { EnhancedTableHead } from "./table/EnhancedTableHead"
 import { UsersTableBody } from "./table/TableBody"
@@ -33,6 +35,7 @@ export const Users = () => {
   const users = useAppSelector((state) => state.users.users)
   const [selected, setSelected] = useState<readonly string[]>([])
   const isSelected = (name: string) => selected.indexOf(name) !== -1
+  const navigate = useNavigate()
 
   const deleteUser = () => {
     dispatch(deleteUserTC({ token, id: selected }))
@@ -56,17 +59,19 @@ export const Users = () => {
   useEffect(() => {
     token && dispatch(getUsersTC(token))
   }, [])
-
-  if (!token) {
-    return <Navigate key={"logoutUser"} to="/login" />
-  }
+  useEffect(() => {
+    if (!token) {
+      dispatch(setIsLoggedIn({ isLoggedIn: false }))
+      navigate(RouterPath.login)
+    }
+  }, [token])
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "90%", mb: 2, margin: "0 auto" }}>
         <ToolBarTable numSelected={selected.length} blockUser={blockUser} deleteUser={deleteUser} unblockUser={unblockUser} selected={selected} />
         <TableContainer sx={{ borderRadius: "5px" }}>
-          <Table aria-labelledby="tableTitle" size={"medium"} sx={{ border: "2px solid black" }}>
+          <Table aria-labelledby="tableTitle" size={"medium"} sx={{ border: "2px solid #6a77d9" }}>
             <EnhancedTableHead numSelected={selected.length} onSelectAllClick={handleSelectAllClick} rowCount={users.length} />
             <TableBody>
               {users.map((user) => {

@@ -19,7 +19,7 @@ export const EnhancedTableHead = (props: EnhancedTableProps) => {
   ]
 
   return (
-    <TableHead sx={{ border: "2px solid black" }}>
+    <TableHead sx={{ bgcolor: "rgba(121, 186, 247,0.8)" }}>
       <TableRow>
         <TableCell padding="checkbox" sx={{ fontSize: "20px" }}>
           <Checkbox
@@ -33,7 +33,7 @@ export const EnhancedTableHead = (props: EnhancedTableProps) => {
           />
         </TableCell>
         {headCells.map((headCell) => (
-          <TableCell key={headCell.id} align={headCell.numeric ? "right" : "left"} padding={headCell.disablePadding ? "none" : "normal"} sx={{ color: "#666699" }}>
+          <TableCell key={headCell.id} align={headCell.numeric ? "right" : "left"} padding={headCell.disablePadding ? "none" : "normal"} sx={{ color: "white", fontSize: "18px" }}>
             <span>{headCell.label}</span>
           </TableCell>
         ))}

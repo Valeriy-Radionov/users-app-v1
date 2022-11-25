@@ -8,11 +8,11 @@ export const usersApi = {
     return baseInstance.get<UserDataType[], AxiosResponse<UserDataType[]>>(usersUrl)
   },
   deleteUser(deleteData: DeleteResponseType) {
-    return baseInstance.put<DeleteResponseType, AxiosResponse<InfoResponseType>>(`${usersUrl}`, deleteData)
+    return baseInstance.put<DeleteResponseType, AxiosResponse<InfoResponseType>>(`${usersUrl}/delete`, deleteData)
   },
 
   blockUser(blockData: BlockUserType) {
-    return baseInstance.put<BlockUserType, AxiosResponse<InfoResponseType>>(`${usersUrl}/block`, blockData)
+    return baseInstance.post<BlockUserType, AxiosResponse<InfoResponseType>>(`${usersUrl}/block`, blockData)
   },
 }
 
