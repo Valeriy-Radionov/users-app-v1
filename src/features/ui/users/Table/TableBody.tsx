@@ -44,7 +44,7 @@ export const UsersTableBody: React.FC<TableBodyPropsType> = ({ user, selected, s
       <TableCell align="right">{user.registrationDate}</TableCell>
       <TableCell align="right">{user.lastLoginDate}</TableCell>
       <TableCell align="right">{user.id}</TableCell>
-      <TableCell align="right">{user.blockStatus.toString()}</TableCell>
+      <TableCell align="right">{user.blockStatus === true ? "block" : "unblock"}</TableCell>
     </TableRow>
   )
 }
